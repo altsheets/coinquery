@@ -1,0 +1,6 @@
+/venv/
+/altcoins.egg-info/
+*.md.html
+.project
+.pydevproject
+*.pyc
