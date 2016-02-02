@@ -40,7 +40,7 @@ class my_install(ORIG_install):
     	ORIG_install.run(self)
 
 
-if __name__ == '__main__':
+def testSubroutines():
 	"""just testing the functions"""
 	print randomString()
 	
@@ -49,3 +49,6 @@ if __name__ == '__main__':
 	print fp
 	createUIDfile(fp)
 	
+
+if __name__ == '__main__':
+	testSubroutines()

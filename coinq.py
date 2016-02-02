@@ -24,7 +24,7 @@ def cli(config, key, only):
 @pass_config
 def price(config, exchange, acronym):
 	"""
-	get altcoin data: altcoin price LTC
+	get cryptocoin data: coinq price LTC
 	"""
 	if not config.only: 
 		click.echo( "%s price from %s: " % (acronym.upper(), exchange), nl=False)
@@ -42,7 +42,7 @@ def price(config, exchange, acronym):
 @pass_config
 def cmc(config, param, acronym):
     """
-    Get coinmarketcap data: altcoin cmc --param volume24 doge
+    Get coinmarketcap data: coinq cmc --param volume24 doge
     """
     if not config.only: 
         click.echo( "%s %s from CMC: " % (acronym.upper(), param), nl=False)
