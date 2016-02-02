@@ -1,19 +1,6 @@
-import click, requests, os
+import requests, os
 
-URLHEAD="http://altsheets.ddns.net:8001/altsheets/"
-
-
-def askDataserver(what, key):
-	try:
-		url=URLHEAD+what+'?auth=%s' % (key)
-		r=requests.get(url)
-	except Exception as e:
-		print url
-		print type(e), e
-		return ""
-	if r.status_code != requests.codes.ok:
-	    return ""
-	return r.text
+import altsheets
 
 class Config(object):
 	def __init__(self):
@@ -22,8 +9,8 @@ class Config(object):
 pass_config=click.make_pass_decorator(Config, ensure=True)
 	
 @click.group()
-@click.option('--key', default=None, help='best to use ENV variable: set ALTSHEETSKEY=yourserialkey')
-@click.option('--only', is_flag=True, help='only result, not full sentence')
+@click.option('--key', default=None, help='Use the ENV variable: set ALTSHEETSKEY=yourserialkey')
+@click.option('--only', is_flag=True, help='Only result, not full sentence')
 @pass_config
 def cli(config, key, only):
 	if key==None: key=os.environ["ALTSHEETSKEY"]
@@ -32,7 +19,7 @@ def cli(config, key, only):
 	# config.acronym=acronym
 
 @cli.command()
-@click.option('--exchange', default='cmc', help='where you want the data from')
+@click.option('--exchange', default='cmc', help='Where do you want the data from')
 @click.argument('acronym', default='BTC', required=False)
 @pass_config
 def price(config, exchange, acronym):
@@ -43,7 +30,7 @@ def price(config, exchange, acronym):
 		click.echo( "%s price from %s: " % (acronym.upper(), exchange), nl=False)
 	
 	what="%s/%s/price" % (acronym, exchange)
-	click.echo( askDataserver(what, config.key), nl=False )
+	click.echo( altsheets.askDataserver(what, config.key), nl=False )
 	
 	if not config.only: 
 		click.echo("")
@@ -61,7 +48,7 @@ def cmc(config, param, acronym):
         click.echo( "%s %s from CMC: " % (acronym.upper(), param), nl=False)
 
     what="%s/cmc/%s" % (acronym, param)
-    click.echo( askDataserver(what, config.key), nl=False )
+    click.echo( altsheets.askDataserver(what, config.key), nl=False )
     
     if not config.only: click.echo("")
 	
