@@ -1,12 +1,19 @@
 # setupCustom.py
 
-Succeeded. 
+(Almost) Succeeded. 
 
 Thanks a lot!
 
+I generate a file ``UID.py`` during ``setuptools.setup``.
 
 ### Problem
-I generate a file ``UID.py`` during ``setuptools.setup``.
+
+Last problem is perhaps easy to solve now?   
+I only want to call ``setupCustom.createUIDfileIntoSourcePath`` and ``setupCustom.deleteUIDfromSourcePath`` when it is UNPACKED on the target machine, not when the BDIST archive is created on my machine.   
+
+Otherwise all installations have the same UID.
+
+So: What how when to trigger which routine during unpacking/installation on the target machine.
 
 
 ### quickstart
@@ -29,9 +36,9 @@ Then
     
 Try ``hello Earth``.
 
-**Trick:** I found out how to debug the setup.py - by raising an Exception at the end of setup.py, then the whole printout is suddenly visible. 
+**Trick:** I found out how to debug the setup.py - by raising an Exception at the end of setup.py - then the whole printout is suddenly visible. 
 
-### purpose
+### Purpose
 Later I want to be able to load an (always-same):
 * **UID.py** file with a machine-specific (or rather installation-specific) user-ID
 * see altsheets.py [line 4](https://github.com/altsheets/coinquery/blob/d8a1b11c6b68a9d923de21c10e6c0081c55dc8c1/altsheets.py#L3-L6): ``from UID import UID``
@@ -49,8 +56,12 @@ were all not working.
 
 Just create a file into the the source tree, copy it with all the others during the setup install, then remove it again in the end. 
 
+    setupCustom.createUIDfileIntoSourcePath()
+    
+    setup(...)
+    
+    setupCustom.deleteUIDfromSourcePath()
+
+
 My first day with setuptools, actually :-)  
 Always wanted to, never needed to. Until now. Great opportunity!
-
-
-

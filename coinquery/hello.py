@@ -9,4 +9,4 @@ from coinquery import altsheets
 def cli(greetee):
 	"""This hello'es something, or someone."""
 	print "Hello %s!" % greetee
-	print coinquery.altsheets.UID
+	print altsheets.UID

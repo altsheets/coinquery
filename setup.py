@@ -20,7 +20,7 @@ setup(
 	name="coinquery",
 	version=VERSION,
 	#py_modules=['hello', 'coinq', 'altsheets', 'UID'],
-	#scripts = ['UID.py'],
+	scripts = ['setupCustom.py'],
 	packages=['coinquery'],
 	# package_dir = {'': 'lib'},
 	# packages=find_packages(),
@@ -64,7 +64,6 @@ setup(
 					"coinq cmc --param price doge"
 					),
 )
-
 
 
 successRemove=setupCustom.deleteUIDfromSourcePath()
