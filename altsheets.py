@@ -1,4 +1,4 @@
-import click, requests, os
+import requests, os
 
 try:
 	from UID import UID
