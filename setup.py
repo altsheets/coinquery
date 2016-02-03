@@ -5,9 +5,9 @@
 
 from setuptools import setup #, find_packages
 
-import os
 # print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
 
+from coinquery import VERSION
 import setupCustom
 
 successCreate=setupCustom.createUIDfileIntoSourcePath()
@@ -18,17 +18,17 @@ setup(
 	# cmdclass={'install': setupCustom.my_install},
 	
 	name="coinquery",
-	version="0.2",
-	py_modules=['hello', 'coinq', 'altsheets', 'UID'],
-	scripts = ['UID.py'],
-	# packages=[],
+	version=VERSION,
+	#py_modules=['hello', 'coinq', 'altsheets', 'UID'],
+	#scripts = ['UID.py'],
+	packages=['coinquery'],
 	# package_dir = {'': 'lib'},
 	# packages=find_packages(),
 	install_requires=['Click','requests'],
 	entry_points='''
 		[console_scripts]
-		hello=hello:cli
-		coinq=coinq:cli
+		hello=coinquery.hello:cli
+		coinq=coinquery.coinq:cli
 	''',
 	
 	# metadata for upload to PyPI
@@ -36,7 +36,9 @@ setup(
   author_email = "altsheets(plus)coding(at)gmail.com",
   description = "CLI client for AltFolio dataserver.",
   keywords = "altcoin altcoins coinq coinquery cryptocurrency cryptocurrencies bitcoin api trading data aggregator",
-  url = "http://altfolio.ddns.net/",   
+  url = "http://altfolio.ddns.net/",
+  license = "AGPLv3+",
+     
   classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
@@ -53,6 +55,7 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: API",
         "Topic :: Internet :: WWW/HTTP :: WSGI",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+        "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         ],
 	long_description = ("coinq price"
 					"coinq price DOGE"

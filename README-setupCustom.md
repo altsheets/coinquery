@@ -1,16 +1,19 @@
 # setupCustom.py
 
-### Problem
-I want to generate a file ``UID.py`` during ``setuptools.setup``, but I just cannot get it working.
+Succeeded. 
 
-Please try this: 
+Thanks a lot!
+
+
+### Problem
+I generate a file ``UID.py`` during ``setuptools.setup``.
 
 
 ### quickstart
 (in virtualenv so not to dirty your python installation)
 
 	mkdir a
-	cd a
+	cd a 
     pip install virtualenv
     virtualenv venv
     venv\Scripts\activate
@@ -24,7 +27,9 @@ Then
     cd coinquery
     pip install --editable .
     
-My small scripts are getting installed (try ``hello Earth``) - but the custom installer (with my preinstall routine) is never called, seemingly? 
+Try ``hello Earth``.
+
+**Trick:** I found out how to debug the setup.py - by raising an Exception at the end of setup.py, then the whole printout is suddenly visible. 
 
 ### purpose
 Later I want to be able to load an (always-same):
@@ -37,14 +42,14 @@ My attempts to create a **preinstall routine**
 * setup.py [line 15](https://github.com/altsheets/coinquery/blob/c14d1343daa9b18d1f8c5e14c89591dbccd06ae5/setup.py#L10-L16) ``cmdclass={'install': setupCustom.my_install}``
 * setupCustom.py [line 31](https://github.com/altsheets/coinquery/blob/c14d1343daa9b18d1f8c5e14c89591dbccd06ae5/setupCustom.py#L31-L40) ``class my_install(ORIG_install)``
 
-are all not working yet.
+were all not working.
 
     
-Please help me: How to execute my own python subroutine during the offical setuptools.setup install procedure?
+#### But it turned out to be much easier:
 
-N.B.: I would like to **always** execute that custom subroutine, that is why I am not introducing an additional verb (or switch) into setup.py
+Just create a file into the the source tree, copy it with all the others during the setup install, then remove it again in the end. 
 
-But perhaps I am not yet understanding all this well enough.   My first day with setuptools, actually :-)  
+My first day with setuptools, actually :-)  
 Always wanted to, never needed to. Until now. Great opportunity!
 
 

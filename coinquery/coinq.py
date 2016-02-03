@@ -3,7 +3,7 @@ import click # pip install Click
 
 import os, webbrowser
 
-import altsheets
+from coinquery import altsheets
 
 
 class Config(object):
@@ -93,22 +93,23 @@ def price(config, exchange, acronym, satoshi):
 @click.argument('acronym', default='BTC', required=False)
 @pass_config
 def cmc(config, param, acronym):
-    """Coinmarketcap data: coinq cmc doge"""
-    several=("," in acronym)
-    if not several and not config.only: 
-        click.echo( "%-5s %-9s: " % (acronym.upper(), param), nl=False)
-
-    what="%s/cmc/%s" % (acronym, param)
-    answer=altsheets.askDataserver(what, config.key)
-    
-    if not several: click.echo( answer )
-    else:
-    	if config.only: click.echo( answer )
-    	else:
-    		answers=answer.split("\n")
-    		for coin, a in zip(acronym.split(","), answers):
-    			click.echo( "%-5s %-9s: %6s" % (coin.upper(), param, a))
-    
+	"""Coinmarketcap data: coinq cmc doge"""
+		
+	several=("," in acronym)
+	if not several and not config.only:
+		click.echo( "%-5s %-9s: " % (acronym.upper(), param), nl=False)
+		
+	what="%s/cmc/%s" % (acronym, param)
+	answer=altsheets.askDataserver(what, config.key)
+	
+	if not several: click.echo( answer )
+	else:
+		if config.only: click.echo( answer )
+		else:
+			answers=answer.split("\n")
+			for coin, a in zip(acronym.split(","), answers):
+				click.echo( "%-5s %-9s: %6s" % (coin.upper(), param, a))
+				
 
 # add the commands to the main command group
 cli.add_command(serial)

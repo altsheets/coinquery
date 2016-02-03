@@ -1,11 +1,14 @@
 """Custom preinstall - creates a UID.py"""
 
-from distutils.command.install import install as ORIG_install
+# from distutils.command.install import install as ORIG_install
 
 import string, random, os
 
 # print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
 
+SUBFOLDER="coinquery"
+from coinquery import VERSION
+PREFIX="coinq%s-" % VERSION
 
 def randomString(UID_LENGTH=20):
 	"""random string of lowercase ascii plus digits"""
@@ -19,10 +22,10 @@ def createUIDfile(filepath):
 	from UID import UID
 	"""
 	
-	target_file = os.path.join(filepath, 'UID.py')
+	target_file = os.path.join(filepath, SUBFOLDER, 'UID.py')
 	
 	with open(target_file, 'w') as fobj:
-		fobj.write('UID="%s"\n' % randomString())
+		fobj.write('UID="%s%s"\n' % (PREFIX, randomString()))
 			
 	# print "Written UID file:", target_file
 	
@@ -33,9 +36,10 @@ def createUIDfileIntoSourcePath():
 	Then try to import to see if it succeeded.
 	"""
 	here=os.path.dirname( os.path.abspath(__file__) )
+	
 	createUIDfile(here)
 	try:
-		from UID import UID
+		from coinquery.UID import UID
 		# print "UID.py could be found, UID is: ", UID
 		return True
 	except:
@@ -45,7 +49,7 @@ def createUIDfileIntoSourcePath():
 def deleteUIDfromSourcePath():
 	here=os.path.dirname(__file__)
 	try:
-		os.remove(os.path.join(here,"UID.py"))
+		os.remove(os.path.join(here, SUBFOLDER, "UID.py"))
 		return True
 	except:
 		return False
