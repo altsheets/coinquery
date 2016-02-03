@@ -53,22 +53,38 @@ def getkey(config):
 		webbrowser.open(url, new=0, autoraise=True)
 
 
+def toSatoshi(bitcoin):
+	return int(float(bitcoin)*100000000)
+	
+	
 @click.command()
 @click.option('--exchange', default='cmc', help='Where do you want the data from?')
+@click.option('--satoshi', is_flag=True)
 @click.argument('acronym', default='BTC', required=False)
 @pass_config
-def price(config, exchange, acronym):
+def price(config, exchange, acronym, satoshi):
 	"""Cryptocurrency prices: coinq price LTC"""
-	if not config.only: 
-		click.echo( "%s price from %s: " % (acronym.upper(), exchange), nl=False)
-		# if several prices, then newline after sentence
-		if "," in exchange or "," in acronym: click.echo()
+	several=("," in exchange or "," in acronym)  
+	
+	if not several and not config.only: 
+		click.echo( "%-5s at %-9s: " % (acronym.upper(), exchange), nl=False)
 	
 	what="%s/%s/price" % (acronym, exchange)
-	click.echo( altsheets.askDataserver(what, config.key), nl=False )
+	answer=altsheets.askDataserver(what, config.key)
 	
-	if not config.only: 
-		click.echo("")
+	if not several:
+		if satoshi: answer=toSatoshi(answer)
+		click.echo(answer)
+	else:
+		if config.only: 
+			if satoshi: answer=toSatoshi(answer)
+			click.echo( answer)
+			
+		else:
+			answers=answer.split("\n")
+			for e,a,p in zip(exchange.split(","), acronym.split(","), answers):
+				if satoshi: p=toSatoshi(p)
+				click.echo("%-5s at %-9s: %8s" % (a,e,p) )
 	
 	
 @click.command()
@@ -78,16 +94,21 @@ def price(config, exchange, acronym):
 @pass_config
 def cmc(config, param, acronym):
     """Coinmarketcap data: coinq cmc doge"""
-    if not config.only: 
-        click.echo( "%s %s from CMC: " % (acronym.upper(), param), nl=False)
-        # if several prices, then newline after sentence
-        if "," in acronym: click.echo()
+    several=("," in acronym)
+    if not several and not config.only: 
+        click.echo( "%-5s %-9s: " % (acronym.upper(), param), nl=False)
 
     what="%s/cmc/%s" % (acronym, param)
-    click.echo( altsheets.askDataserver(what, config.key), nl=False )
+    answer=altsheets.askDataserver(what, config.key)
     
-    if not config.only: click.echo("")
-	
+    if not several: click.echo( answer )
+    else:
+    	if config.only: click.echo( answer )
+    	else:
+    		answers=answer.split("\n")
+    		for coin, a in zip(acronym.split(","), answers):
+    			click.echo( "%-5s %-9s: %6s" % (coin.upper(), param, a))
+    
 
 # add the commands to the main command group
 cli.add_command(serial)
