@@ -1,10 +1,10 @@
-"""Custom preinstall - but cannot get it working"""
+"""Custom preinstall - creates a UID.py"""
 
 from distutils.command.install import install as ORIG_install
 
 import string, random, os
 
-print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
+# print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
 
 
 def randomString(UID_LENGTH=20):
@@ -22,23 +22,34 @@ def createUIDfile(filepath):
 	target_file = os.path.join(filepath, 'UID.py')
 	
 	with open(target_file, 'w') as fobj:
-		fobj.write('UID=%s\n' % randomString())
+		fobj.write('UID="%s"\n' % randomString())
 			
-	print "Written UID file:"
-	print target_file
+	# print "Written UID file:", target_file
+	
+
+def createUIDfileIntoSourcePath():
+	"""
+	Current absolute path, then create UID.py
+	Then try to import to see if it succeeded.
+	"""
+	here=os.path.dirname( os.path.abspath(__file__) )
+	createUIDfile(here)
+	try:
+		from UID import UID
+		# print "UID.py could be found, UID is: ", UID
+		return True
+	except:
+		return False
 
 
-class my_install(ORIG_install):
-    """Custom preinstall - but cannot get it working."""
-
-    def run(self):
-    	print "Custom preinstall:"
-    	# honor the --dry-run flag
-    	if not self.dry_run:
-    		createUIDfile(self.build_lib)
-		
-    	ORIG_install.run(self)
-
+def deleteUIDfromSourcePath():
+	here=os.path.dirname(__file__)
+	try:
+		os.remove(os.path.join(here,"UID.py"))
+		return True
+	except:
+		return False
+	
 
 def testSubroutines():
 	"""just testing the functions"""

@@ -2,8 +2,10 @@ import requests, os
 
 try:
 	from UID import UID
+	# print UID
 except:
-	UID=""
+	print "coinquery: UID not set, please rerun installation."
+	exit()
 
 URLHEAD="http://altsheets.ddns.net:8001/altsheets/"
 

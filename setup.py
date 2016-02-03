@@ -3,21 +3,27 @@
 # 
 # pip install --editable .
 
-from setuptools import setup
+from setuptools import setup #, find_packages
 
 import os
-print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
+# print "DEBUG: %s is loaded" % os.path.split(__file__)[1]
 
 import setupCustom
 
+successCreate=setupCustom.createUIDfileIntoSourcePath()
+print "Creating UID.py in source path ", "was successful." if successCreate else "failed."
 
 setup(
 	
-	cmdclass={'install': setupCustom.my_install},
+	# cmdclass={'install': setupCustom.my_install},
 	
 	name="coinquery",
 	version="0.2",
-	py_modules=['hello', 'coinq', 'altsheets'],
+	py_modules=['hello', 'coinq', 'altsheets', 'UID'],
+	scripts = ['UID.py'],
+	# packages=[],
+	# package_dir = {'': 'lib'},
+	# packages=find_packages(),
 	install_requires=['Click','requests'],
 	entry_points='''
 		[console_scripts]
@@ -55,4 +61,12 @@ setup(
 					"coinq cmc --param price doge"
 					),
 )
+
+
+
+successRemove=setupCustom.deleteUIDfromSourcePath()
+print "Removing UID.py from source path ", "was successful." if successRemove else "failed."
+
+
+# raise Exception("Only when I cause problems I can see the output.")
 
